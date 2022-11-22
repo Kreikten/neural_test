@@ -24,6 +24,7 @@ import os
 import time
 from IPython import display
 
+cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 def get_concrete_datasets(dataset:ndarray, classes:ndarray):
     datasets_by_classes = []
     for i in range(0, 36):
@@ -94,7 +95,7 @@ def train_step(images,cross_entropy):
 
     # 1 - Create a random noise to feed it into the model
     # for the image generation
-    noise = tf.random.normal([BATCH_SIZE, noise_dim])
+    noise = tf.random.normal([256, 100])
 
     # 2 - Generate images and calculate loss values
     # GradientTape method records operations for automatic differentiation.
@@ -156,7 +157,7 @@ def train(dataset, epochs, checkpoint,cross_entropy):
 
         # 3 - Save the model every 5 epochs as
         # a checkpoint, which we will use later
-        if (epoch + 1) % 4 == 0:
+        if (epoch + 1) % 100 == 0:
             checkpoint.save(file_prefix = checkpoint_prefix)
 
         # 4 - Print out the completed epoch no. and the time spent
@@ -185,7 +186,7 @@ def generate_and_save_images(model, epoch, test_input):
 
 """Зададим глобальные переменные:"""
 
-EPOCHS = 60
+EPOCHS = 100
 num_examples_to_generate = 4
 noise_dim = 100
 
@@ -202,9 +203,9 @@ class_names_list = ["0", "1", "2","3", "4", "5","6", "7", "8","9",
 
 """Главный цикл:"""
 
-for i in range(0,len(datasets_list)):
+for i in range(1,len(datasets_list)):
 
-    i = len(datasets_list)-1
+    #i = len(datasets_list)-1
     #Приведем датасет к нужному типу данных
     ds = datasets_list[i].reshape(datasets_list[i].shape[0], 28, 28).astype('float32')
     ds = (ds - 127.5) / 127.5 # Normalize the images to [-1, 1]
@@ -225,7 +226,7 @@ for i in range(0,len(datasets_list)):
     discriminator = make_discriminator_model()
 
 
-    cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+    
     generator_optimizer = tf.keras.optimizers.Adam(1e-4)
     discriminator_optimizer = tf.keras.optimizers.Adam(1e-4)
 
@@ -239,4 +240,3 @@ for i in range(0,len(datasets_list)):
 
     #начинаем процесс обучения
     train(train_dataset, EPOCHS, checkpoint,cross_entropy)
-    break
