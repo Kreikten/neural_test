@@ -204,7 +204,7 @@ class_names_list = ["0", "1", "2","3", "4", "5","6", "7", "8","9",
 
 for i in range(0,len(datasets_list)):
 
-
+    i = len(datasets_list)-1
     #Приведем датасет к нужному типу данных
     ds = datasets_list[i].reshape(datasets_list[i].shape[0], 28, 28).astype('float32')
     ds = (ds - 127.5) / 127.5 # Normalize the images to [-1, 1]
