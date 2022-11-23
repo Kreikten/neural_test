@@ -253,26 +253,28 @@ def mainloop_all():
         print(BUFFER_SIZE, EPOCHS)
         train(train_dataset, EPOCHS, checkpoint,cross_entropy)
 
-def mainloop_one(ds:ndarray, i : int):
-    ds = ds.reshape(ds.shape[0], 28, 28).astype('float32')
-    ds = (ds - 127.5) / 127.5  # Normalize the images to [-1, 1]
+i = int(input("Введите элемент для обучения: "))
+concrete_dataset = get_concrete_dataset(datasets_list, i)
+del datasets_list
+ds = concrete_dataset.reshape(concrete_dataset.shape[0], 28, 28).astype('float32')
+ds = (ds - 127.5) / 127.5  # Normalize the images to [-1, 1]
 
     # укажем размер буфера и батча, папки для сохранения чепоинтов
-    BUFFER_SIZE = len(ds[0])
-    BATCH_SIZE = 256
-    checkpoint_dir = './training_checkpoints'
-    checkpoint_prefix = os.path.join(checkpoint_dir, class_names_list[i], "ckpt")
-    print(checkpoint_prefix)
+BUFFER_SIZE = len(ds)
+BATCH_SIZE = 256
+checkpoint_dir = './training_checkpoints'
+checkpoint_prefix = os.path.join(checkpoint_dir, class_names_list[i], "ckpt")
+print(checkpoint_prefix)
 
     # Batch and shuffle the data
-    train_dataset = tf.data.Dataset.from_tensor_slices(ds).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
-    print(train_dataset)
+train_dataset = tf.data.Dataset.from_tensor_slices(ds).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+print(train_dataset)
 
     # создадим модель нашей нейронной сети
-    generator = make_generator_model()
-    discriminator = make_discriminator_model()
+generator = make_generator_model()
+discriminator = make_discriminator_model()
 
-    checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
+checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
                                      discriminator_optimizer=discriminator_optimizer,
                                      generator=generator,
                                      discriminator=discriminator)
@@ -281,15 +283,15 @@ def mainloop_one(ds:ndarray, i : int):
 
     # начинаем процесс обучения
 
-    if BUFFER_SIZE <= 25000:
-        EPOCHS = 1
-    else:
-        EPOCHS = 1
-    print(BUFFER_SIZE, EPOCHS)
-    train(train_dataset, EPOCHS, checkpoint, cross_entropy)
+if BUFFER_SIZE <= 22000:
+    EPOCHS = 200
+else:
+    EPOCHS = 100
+print("BF size: ",BUFFER_SIZE, EPOCHS)
+train(train_dataset, EPOCHS, checkpoint, cross_entropy)
 
 
-i = int(input("Введите элемент для обучения: "))
-concrete_dataset = get_concrete_dataset(datasets_list, i)
-del datasets_list
-mainloop_one(concrete_dataset, i)
+
+
+
+
