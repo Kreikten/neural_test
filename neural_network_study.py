@@ -23,7 +23,7 @@ from emnist import extract_training_samples
 import os
 import time
 from IPython import display
-
+cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 generator_optimizer = tf.keras.optimizers.Adam(1e-4)
 discriminator_optimizer = tf.keras.optimizers.Adam(1e-4)
 cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
@@ -243,8 +243,8 @@ for i in range(3,len(datasets_list)):
     #начинаем процесс обучения
 
     if BUFFER_SIZE <=30000:
-        EPOCHS = 200
+        EPOCHS = 1
     else:
-        EPOCHS = 100
+        EPOCHS = 1
     print(BUFFER_SIZE, EPOCHS)
-    #train(train_dataset, EPOCHS, checkpoint,cross_entropy)
+    train(train_dataset, EPOCHS, checkpoint,cross_entropy)
