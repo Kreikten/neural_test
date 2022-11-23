@@ -203,7 +203,7 @@ class_names_list = ["0", "1", "2","3", "4", "5","6", "7", "8","9",
 
 """Главный цикл:"""
 
-for i in range(1,len(datasets_list)):
+for i in range(2,len(datasets_list)):
 
     #i = len(datasets_list)-1
     #Приведем датасет к нужному типу данных
