@@ -252,7 +252,7 @@ def mainloop_all():
             EPOCHS = 1
         print(BUFFER_SIZE, EPOCHS)
         train(train_dataset, EPOCHS, checkpoint,cross_entropy)
-
+print(class_names_list)
 i = int(input("Введите элемент для обучения: "))
 concrete_dataset = get_concrete_dataset(datasets_list, i)
 del datasets_list
